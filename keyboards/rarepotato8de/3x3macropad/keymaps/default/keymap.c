@@ -112,6 +112,7 @@ static void render_bongo2(void) {
 	oled_write_raw_P(data, sizeof(data));
 }
 
+/* This code switches the shown image on the oled on every 350th call of this function */
 bool showBongo1 = true;
 int calls = 0;
 bool oled_task_user(void) {
@@ -120,10 +121,11 @@ bool oled_task_user(void) {
 		calls = 0;
 	}
 	
-	if(showBongo1)
-		render_bongo1();
-	else 
+	if(showBongo1) {
+		render_bongo1();	
+	} else {
 		render_bongo2();
+	}
     return false;
 }
 #endif
