@@ -43,7 +43,6 @@
     },
     "url": "https://github.com/rarepotato8de/3x3macropad",
     "usb": {
-        "device_ver": "0x0001",
         "device_version": "0.0.1",
         "pid": "0x0001",
         "vid": "0x5353"
