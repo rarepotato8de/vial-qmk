@@ -89,7 +89,6 @@
    },
    "url":"https://candykeys.com/",
    "usb":{
-      "device_ver":"0x0001",
       "device_version":"0.0.1",
       "pid":"0x0001",
       "vid":"0x434B"
