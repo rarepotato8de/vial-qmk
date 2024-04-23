@@ -21,14 +21,14 @@ bool rgb_matrix_indicators_kb(void) {
         return false;
     }
 	if (host_keyboard_led_state().scroll_lock) {
-        RGB_MATRIX_INDICATOR_SET_COLOR(0, 0, 255, 0);
+        rgb_matrix_set_color(0, 0, 255, 0);
     } else {
-        RGB_MATRIX_INDICATOR_SET_COLOR(0, 0, 0, 0);
+        rgb_matrix_set_color(0, 0, 0, 0);
     }
     if (host_keyboard_led_state().caps_lock) {
-        RGB_MATRIX_INDICATOR_SET_COLOR(1, 0, 255, 0);
+        rgb_matrix_set_color(1, 0, 255, 0);
     } else {
-        RGB_MATRIX_INDICATOR_SET_COLOR(1, 0, 0, 0);
+        rgb_matrix_set_color(1, 0, 0, 0);
     }
 	return false;
 }
