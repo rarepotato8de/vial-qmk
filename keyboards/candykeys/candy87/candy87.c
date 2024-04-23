@@ -13,5 +13,22 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+ 
+#include QMK_KEYBOARD_H
 
-#pragma once
+bool rgb_matrix_indicators_kb(void) {
+    if (!rgb_matrix_indicators_user()) {
+        return false;
+    }
+	if (host_keyboard_led_state().scroll_lock) {
+        RGB_MATRIX_INDICATOR_SET_COLOR(0, 0, 255, 0);
+    } else {
+        RGB_MATRIX_INDICATOR_SET_COLOR(0, 0, 0, 0);
+    }
+    if (host_keyboard_led_state().caps_lock) {
+        RGB_MATRIX_INDICATOR_SET_COLOR(1, 0, 255, 0);
+    } else {
+        RGB_MATRIX_INDICATOR_SET_COLOR(1, 0, 0, 0);
+    }
+	return false;
+}

@@ -1,6 +1,6 @@
 # Candy87
 
-![Candy87](imgur.com image replace me!)
+![Candy87](https://i.imgur.com/HeCz1u8.png)
 
 The Candy87 Hotswap PCB is a universal TKL PCB by Candykeys.
 It supports ISO Hotswap by default (ANSI possible as well) and many layout options.
