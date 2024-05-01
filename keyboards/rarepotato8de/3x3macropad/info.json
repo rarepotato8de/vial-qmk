@@ -12,6 +12,9 @@
             {"pin_a": "F4", "pin_b": "B1"}
         ]
     },
+	"bootmagic": {
+		"matrix": [1, 0]
+	},
     "features": {
         "bootmagic": true,
         "encoder": true,
