@@ -25,6 +25,7 @@ def system_libs(binary: str) -> List[Path]:
     """Find the system include directory that the given build tool uses.
     """
     cli.log.debug("searching for system library directory for binary: %s", binary)
+    bin_path = shutil.which(binary)
 
     # Actually query xxxxxx-gcc to find its include paths.
     if binary.endswith("gcc") or binary.endswith("g++"):
@@ -36,31 +37,7 @@ def system_libs(binary: str) -> List[Path]:
                 paths.append(Path(line.strip()).resolve())
         return paths
 
-    return list(Path(binary).resolve().parent.parent.glob("*/include")) if binary else []
-
-
-@lru_cache(maxsize=10)
-def cpu_defines(binary: str, compiler_args: str) -> List[str]:
-    cli.log.debug("gathering definitions for compilation: %s %s", binary, compiler_args)
-    if binary.endswith("gcc") or binary.endswith("g++"):
-        invocation = [binary, '-dM', '-E']
-        if binary.endswith("gcc"):
-            invocation.extend(['-x', 'c'])
-        elif binary.endswith("g++"):
-            invocation.extend(['-x', 'c++'])
-        compiler_args = shlex.split(compiler_args)
-        invocation.extend(compiler_args)
-        invocation.append('-')
-        result = cli.run(invocation, capture_output=True, check=True, stdin=None, input='\n')
-        define_args = []
-        for line in result.stdout.splitlines():
-            line_args = line.split(' ', 2)
-            if len(line_args) == 3 and line_args[0] == '#define':
-                define_args.append(f'-D{line_args[1]}={line_args[2]}')
-            elif len(line_args) == 2 and line_args[0] == '#define':
-                define_args.append(f'-D{line_args[1]}')
-        return list(sorted(set(define_args)))
-    return []
+    return list(Path(bin_path).resolve().parent.parent.glob("*/include")) if bin_path else []
 
 
 file_re = re.compile(r'printf "Compiling: ([^"]+)')
@@ -91,12 +68,9 @@ def parse_make_n(f: Iterator[str]) -> List[Dict[str, str]]:
                 # we have a hit!
                 this_cmd = m.group(1)
                 args = shlex.split(this_cmd)
-                binary = shutil.which(args[0])
-                compiler_args = set(filter(lambda x: x.startswith('-m') or x.startswith('-f'), args))
-                for s in system_libs(binary):
+                for s in system_libs(args[0]):
                     args += ['-isystem', '%s' % s]
-                args.extend(cpu_defines(binary, ' '.join(shlex.quote(s) for s in compiler_args)))
-                new_cmd = ' '.join(shlex.quote(s) for s in args)
+                new_cmd = ' '.join(shlex.quote(s) for s in args if s != '-mno-thumb-interwork')
                 records.append({"directory": str(QMK_FIRMWARE.resolve()), "command": new_cmd, "file": this_file})
                 state = 'start'
 
